@@ -69,7 +69,33 @@ const getWorkloads = async (req, res) => {
     }
 };
 
+const deleteWorkload = async (req, res) => {
+  try {
+    const workload = await Workload.findById(req.params.id);
+    if (!workload) return res.status(404).json({ message: 'Workload not found' });
+
+    // If allocated, free up the machine resources
+    if (workload.status === 'Allocated' && workload.assignedMachine) {
+      await Machine.findOneAndUpdate(
+        { machineName: workload.assignedMachine },
+        {
+          $inc: {
+            availableCpu: workload.cpuNeeded,
+            availableRam: workload.ramNeeded
+          }
+        }
+      );
+    }
+
+    await Workload.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Workload deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
     createWorkload,
     getWorkloads,
+    deleteWorkload,
 };

@@ -22,9 +22,9 @@ app.use("/api/dashboard", dashboardRoutes);
 
 const checkOfflineMachines =require("./utils/checkOfflineMachines");
 
-// app.get("/", (req, res) => {
-//   res.send("Mini Cloud Platform API Running");
-// });
+app.get("/", (req, res) => {
+  res.send("Mini Cloud Platform API Running");
+});
 setInterval(() => {
     checkOfflineMachines();
 }, 10000);
