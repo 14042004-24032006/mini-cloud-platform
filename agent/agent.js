@@ -35,7 +35,7 @@ async function sendHeartbeat() {
         };
 
         const response = await axios.post(
-            "http://localhost:5000/api/machines/heartbeat",
+            "http://54.234.231.49:5000/api/machines/heartbeat",
             data
         );
 
